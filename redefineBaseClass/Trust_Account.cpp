@@ -24,6 +24,10 @@ bool Trust_Account::withdraw(double amount) {
         std::cout << "Too many attempts to withdraw" << std::endl;
         return false;
     }
+    if (amount > this->balance/5 ) {
+        std::cout << "You cannot withdraw more than 20% of total account balance" << std::endl;
+        return false;
+    }
     if (Savings_Account::withdraw(amount)) {
         withdrawal_count++;
         return true;
