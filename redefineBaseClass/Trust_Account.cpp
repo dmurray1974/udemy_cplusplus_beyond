@@ -7,29 +7,24 @@
 //    friend std::ostream &operator<<(std::ostream &os, const Trust_Account &account);
 
 Trust_Account::Trust_Account(std::string name, double balance, double int_rate)
-        : Savings_Account(name, balance, int_rate) {
+        : Savings_Account(name, balance, int_rate), num_withdrawals {0} {
 }
 
 
 bool Trust_Account::deposit(double amount) {
-        if ( amount > 5000.00) {
-            amount += 50.00;
+        if ( amount > bonus_threshold) {
+            amount += bonus_amount;
         }
         return Savings_Account::deposit(amount);
 }
 
 bool Trust_Account::withdraw(double amount) {
 
-    if (withdrawal_count >= 3 ) {
-        std::cout << "Too many attempts to withdraw" << std::endl;
-        return false;
-    }
-    if (amount > this->balance/5 ) {
-        std::cout << "You cannot withdraw more than 20% of total account balance" << std::endl;
+    if (num_withdrawals > max_withdrawals || amount > balance * max_withdrawal_percent ) {
         return false;
     }
     if (Savings_Account::withdraw(amount)) {
-        withdrawal_count++;
+        num_withdrawals++;
         return true;
     }
     return false;
@@ -37,6 +32,6 @@ bool Trust_Account::withdraw(double amount) {
 
 
 std::ostream &operator<<(std::ostream &os, const Trust_Account &account) {
-    os << "[Trust Account Name : " << account.name << " ; balance: £" << account.balance << " : Interest Rate: " << account.int_rate << "%.] [" << account.withdrawal_count << "]";
+    os << "[Trust Account Name : " << account.name << " ; balance: £" << account.balance << " : Interest Rate: " << account.int_rate << "%.] [" << account.num_withdrawals << "]";
     return os;
 }
