@@ -1,0 +1,17 @@
+this is a text file
+I am goiubg tyo read it
+and see what happens
+
+
+Fix: make the parameter name in the function body match the actual parameter name in the signature — either rename the parameter to account, or rename the usages in the body to whatever the signature actually calls it. E.g.:
+
+cpp
+std::ostream& operator<<(std::ostream& os, const Savings_Account& account) {
+    os << "[Savings Account Name : " << account.name << " ; balance: £" << account.balance
+       << " : Interest Rate: " << account.int_rate << "%.]";
+    return os;
+}
+
+And same as above — Savings_Account's operator<< will also need friend access declared in Savings_Account.h (or in Account.h if name/balance are what it's reading, since those are inherited as protected from Account).
+
+Once both are fixed, rebuild — Account_Util.cpp didn't even get a chance to compile yet since the build stopped, so there may be more waiting once these two are resolved.
